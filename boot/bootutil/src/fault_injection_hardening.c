@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2020 Arm Limited
  */
-
+#include <zephyr/drivers/gpio.h>
 #include "bootutil/fault_injection_hardening.h"
 
 #ifdef FIH_ENABLE_DOUBLE_VARS
@@ -76,3 +76,10 @@ void fih_panic_loop(void)
     __asm volatile ("b fih_panic_loop");
 }
 #endif /* FIH_ENABLE_GLOBAL_FAIL */
+
+void fih_led_error_activate(void)
+{
+    static const struct gpio_dt_spec led_red = GPIO_DT_SPEC_GET(DT_ALIAS(ledred), gpios); \
+    gpio_pin_configure_dt(&led_red, GPIO_OUTPUT);\
+    gpio_pin_set_dt(&led_red, 1); \
+}

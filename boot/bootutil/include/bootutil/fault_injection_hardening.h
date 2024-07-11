@@ -138,10 +138,12 @@ extern fih_ret FIH_BOOT_HOOK_REGULAR;
  * used to prevent optimization
  */
 __attribute__((noinline)) __attribute__((used))
+void fih_led_error_activate(void);
 void fih_panic_loop(void);
-#define FIH_PANIC fih_panic_loop()
+#define FIH_PANIC do{fih_led_error_activate(); fih_panic_loop();}while(false);
 #else
-#define FIH_PANIC while (1) {}
+void fih_led_error_activate(void);
+#define FIH_PANIC do{fih_led_error_activate(); while (1) {};}while(false);
 #endif  /* FIH_ENABLE_GLOBAL_FAIL */
 
 /* NOTE: For functions to be inlined outside their compilation unit they have to
